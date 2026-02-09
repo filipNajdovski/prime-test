@@ -4,9 +4,10 @@ import { extractTokenFromHeader, getUserFromToken } from "@/lib/auth";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: initialGameId } = await params;
     const authHeader = req.headers.get("authorization");
     const token = extractTokenFromHeader(authHeader);
     if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -14,7 +15,7 @@ export async function POST(
     const user = await getUserFromToken(token);
     if (!user) return NextResponse.json({ message: "Invalid token" }, { status: 401 });
 
-    let gameId = params.id;
+    let gameId = initialGameId;
     if (!gameId) {
       try {
         const body = await req.json();
