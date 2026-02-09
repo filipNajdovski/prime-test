@@ -44,8 +44,9 @@ export function useGames({
         if (provider) params.append("provider", provider);
         params.append("sort", sort);
 
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/games?${params}`,
+          `${baseUrl}/api/games?${params}`,
           {
             method: "GET",
             headers: {

@@ -6,34 +6,25 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
-const connectionString = process.env.DATABASE_URL;
+const connectionString = process.env.DATABASE_URL || process.env.DIRECT_URL;
 let prismaClient: PrismaClient;
 
-if (connectionString) {
-  const pool = new Pool({ connectionString });
-  const adapter = new PrismaPg(pool);
+if (!connectionString) {
+  throw new Error("Missing DATABASE_URL or DIRECT_URL environment variable.");
+}
 
-  prismaClient =
-    global.prisma ||
-    new PrismaClient({
-      adapter,
-      log: process.env.NODE_ENV === "development" ? ["query"] : [],
-    });
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
 
-  if (process.env.NODE_ENV !== "production") {
-    global.prisma = prismaClient;
-  }
-} else {
-  // Fallback to default PrismaClient if no DATABASE_URL is provided (useful for tests)
-  prismaClient =
-    global.prisma ||
-    new PrismaClient({
-      log: process.env.NODE_ENV === "development" ? ["query"] : [],
-    });
+prismaClient =
+  global.prisma ||
+  new PrismaClient({
+    adapter,
+    log: process.env.NODE_ENV === "development" ? ["query"] : [],
+  });
 
-  if (process.env.NODE_ENV !== "production") {
-    global.prisma = prismaClient;
-  }
+if (process.env.NODE_ENV !== "production") {
+  global.prisma = prismaClient;
 }
 
 export const prisma = prismaClient;
