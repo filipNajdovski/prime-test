@@ -4,10 +4,11 @@ import { extractTokenFromHeader, getUserFromToken } from "@/lib/auth";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { gameId: string } }
+  { params }: { params: Promise<{ gameId: string }> }
 ) {
   try {
     // Check authentication
+    const { gameId } = await params;
     const authHeader = req.headers.get("authorization");
     const token = extractTokenFromHeader(authHeader);
 
@@ -19,8 +20,6 @@ export async function POST(
     if (!user) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
-
-    const gameId = params.gameId;
 
     // Verify game exists
     const game = await prisma.game.findUnique({
@@ -61,9 +60,12 @@ export async function POST(
 
     return NextResponse.json(favorite, { status: 201 });
   } catch (error) {
-    console.error("Add favorite error:", error);
+    console.error("Add favorite error:", error instanceof Error ? error.message : error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { 
+        message: "Internal server error",
+        error: error instanceof Error ? error.message : "Unknown error"
+      },
       { status: 500 }
     );
   }
@@ -71,10 +73,11 @@ export async function POST(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { gameId: string } }
+  { params }: { params: Promise<{ gameId: string }> }
 ) {
   try {
     // Check authentication
+    const { gameId } = await params;
     const authHeader = req.headers.get("authorization");
     const token = extractTokenFromHeader(authHeader);
 
@@ -86,8 +89,6 @@ export async function DELETE(
     if (!user) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
-
-    const gameId = params.gameId;
 
     // Delete favorite
     const favorite = await prisma.favorite.delete({
