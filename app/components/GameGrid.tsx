@@ -7,6 +7,7 @@ import { GameCard } from "./GameCard";
 import { SearchBar } from "./SearchBar";
 import { GamePlayModal } from "./GamePlayModal";
 import { useGames } from "../hooks/useGames";
+import { useAuth } from "../context/AuthContext";
 
 interface GameGridProps {
   defaultSort?: string;
@@ -54,6 +55,12 @@ export function GameGrid({
   });
 
   const allGames = useMemo(() => allGamesList, [allGamesList]);
+  const { user, isAuthenticated } = useAuth();
+
+  // Favorites state
+  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
+  const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
+  const [showFavorites, setShowFavorites] = useState(false);
 
   // Sync to URL whenever filters change
   useEffect(() => {
@@ -83,6 +90,34 @@ export function GameGrid({
     setSearch("");
     setProvider("");
   };
+
+  // Load user's favorites when authenticated
+  useEffect(() => {
+    const loadFavorites = async () => {
+      if (!isAuthenticated) {
+        setFavoriteIds(new Set());
+        setFavoriteGames([]);
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("auth_token");
+        const res = await fetch(`/api/favorites`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const favs = await res.json();
+        const ids = new Set<string>(favs.map((f: any) => f.game.id));
+        const gamesList = favs.map((f: any) => f.game as Game);
+        setFavoriteIds(ids);
+        setFavoriteGames(gamesList);
+      } catch (err) {
+        console.error("Load favorites error", err);
+      }
+    };
+
+    loadFavorites();
+  }, [isAuthenticated]);
 
   const handlePlay = async (gameId: string) => {
     const token = localStorage.getItem("auth_token");
@@ -147,6 +182,58 @@ export function GameGrid({
     }
   };
 
+  // Toggle favorite with optimistic UI
+  const handleFavoriteToggle = async (gameId: string, shouldFavorite: boolean) => {
+    if (!isAuthenticated) {
+      alert("Please log in to favorite games");
+      return;
+    }
+
+    const token = localStorage.getItem("auth_token");
+    
+    // Save previous state for revert if needed
+    const prevFavoriteIds = new Set(favoriteIds);
+    const prevFavoriteGames = [...favoriteGames];
+    
+    // Optimistic update
+    const updated = new Set(prevFavoriteIds);
+    if (shouldFavorite) {
+      updated.add(gameId);
+      // Find the game object from current view and add to favoriteGames immediately
+      const gameToAdd = games.find((g) => g.id === gameId);
+      if (gameToAdd && !favoriteGames.find((g) => g.id === gameId)) {
+        setFavoriteGames((g) => [gameToAdd, ...g]);
+      }
+    } else {
+      updated.delete(gameId);
+      // If viewing favorites, remove from display
+      if (showFavorites) {
+        setFavoriteGames((g) => g.filter((x) => x.id !== gameId));
+      } else {
+        // Not viewing favorites, just remove from the list
+        setFavoriteGames((g) => g.filter((x) => x.id !== gameId));
+      }
+    }
+    setFavoriteIds(updated);
+
+    try {
+      const method = shouldFavorite ? "POST" : "DELETE";
+      const res = await fetch(`/api/favorites/${encodeURIComponent(gameId)}`, {
+        method,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        throw new Error(`Favorite API ${method} failed`);
+      }
+    } catch (err) {
+      console.error("Favorite toggle failed", err);
+      // Revert to previous state
+      setFavoriteIds(prevFavoriteIds);
+      setFavoriteGames(prevFavoriteGames);
+      alert("Failed to update favorite");
+    }
+  };
+
   // Memoize callback handlers to prevent unnecessary re-renders
   const handleSearchChange = useCallback((newSearch: string) => {
     setSearch(newSearch);
@@ -168,6 +255,9 @@ export function GameGrid({
     setPage(1);
   }, []);
 
+  // Decide which list to render depending on favorites toggle
+  const displayedGames = showFavorites ? favoriteGames : games || [];
+
   return (
     <div className="space-y-6">
       {/* Search & Filters */}
@@ -184,6 +274,34 @@ export function GameGrid({
         allGames={allGames}
         loading={loading}
       />
+
+      {/* Toggle: All Games / My Favorites */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowFavorites(false)}
+            className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
+              !showFavorites
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            All Games
+          </button>
+          <button
+            onClick={() => setShowFavorites(true)}
+            className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
+              showFavorites
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            My Favorites ({favoriteGames.length})
+          </button>
+        </div>
+
+        <div className="text-sm text-gray-600">{showFavorites ? `${favoriteGames.length} favorite(s)` : `${pagination.total} total`}</div>
+      </div>
 
       {/* Error State */}
       {error && (
@@ -215,50 +333,50 @@ export function GameGrid({
       )}
 
       {/* Games Grid */}
-      {!loading && games.length > 0 && (
+      {!loading && displayedGames.length > 0 && (
         <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {games.map((game) => (
+            {displayedGames.map((game) => (
               <GameCard
                 key={game.id}
                 game={game}
                 onPlay={handlePlay}
-                onFavoriteToggle={(gameId, isFav) => {
-                  console.log(`Toggle favorite for ${gameId}: ${isFav}`);
-                  // Will implement in next step
-                }}
+                onFavoriteToggle={(gameId, isFav) => handleFavoriteToggle(gameId, isFav)}
+                isFavorited={favoriteIds.has(game.id)}
               />
             ))}
           </div>
 
-          {/* Pagination */}
-          <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4">
-            <div className="text-sm text-gray-600">
-              Page {pagination.page} of {pagination.totalPages} (
-              {pagination.total} total games)
+          {/* Pagination (only for All Games list) */}
+          {!showFavorites && (
+            <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4">
+              <div className="text-sm text-gray-600">
+                Page {pagination.page} of {pagination.totalPages} (
+                {pagination.total} total games)
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={page === 1}
+                  className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={handleNextPage}
+                  disabled={page >= pagination.totalPages}
+                  className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50"
+                >
+                  Next
+                </button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handlePrevPage}
-                disabled={page === 1}
-                className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50"
-              >
-                Previous
-              </button>
-              <button
-                onClick={handleNextPage}
-                disabled={page >= pagination.totalPages}
-                className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+          )}
         </>
       )}
 
       {/* Empty State */}
-      {!loading && games.length === 0 && (
+      {!loading && displayedGames.length === 0 && (
         <div className="flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-12">
           <div className="text-center">
             <p className="text-lg font-semibold text-gray-900">No games found</p>
