@@ -4,10 +4,10 @@ import { extractTokenFromHeader, getUserFromToken } from "@/lib/auth";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const gameId = params.id;
+    const { id: gameId } = await params;
 
     if (!gameId) {
       return NextResponse.json({ message: "Missing game id" }, { status: 400 });
@@ -33,10 +33,12 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.debug("POST /api/games/[id] called", { params, headers: Object.fromEntries(req.headers) });
+    const { id: initialId } = await params;
+    let gameId: string | undefined = initialId;
+    console.debug("POST /api/games/[id] called", { id: gameId, headers: Object.fromEntries(req.headers) });
     // Check authentication
     const authHeader = req.headers.get("authorization");
     const token = extractTokenFromHeader(authHeader);
@@ -49,8 +51,6 @@ export async function POST(
     if (!user) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
-
-    let gameId = params.id;
 
     // Fallback: some clients may send the id in the request body instead of the route param.
     if (!gameId) {
