@@ -9,6 +9,10 @@ export async function GET(
   try {
     const gameId = params.id;
 
+    if (!gameId) {
+      return NextResponse.json({ message: "Missing game id" }, { status: 400 });
+    }
+
     const game = await prisma.game.findUnique({
       where: { id: gameId },
     });
@@ -32,6 +36,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.debug("POST /api/games/[id] called", { params, headers: Object.fromEntries(req.headers) });
     // Check authentication
     const authHeader = req.headers.get("authorization");
     const token = extractTokenFromHeader(authHeader);
@@ -45,7 +50,38 @@ export async function POST(
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
 
-    const gameId = params.id;
+    let gameId = params.id;
+
+    // Fallback: some clients may send the id in the request body instead of the route param.
+    if (!gameId) {
+      try {
+        const body = await req.json();
+        gameId = body?.gameId || body?.id || gameId;
+      } catch (e) {
+        // ignore parse errors
+      }
+    }
+    // Final fallback: parse id from request URL path (e.g., /api/games/<id>)
+    if (!gameId) {
+      try {
+        const url = new URL(req.url);
+        const parts = url.pathname.split("/").filter(Boolean);
+        // expecting [..., 'api', 'games', '<id>']
+        const maybeId = parts.length ? parts[parts.length - 1] : null;
+        if (maybeId && maybeId !== "api" && maybeId !== "games") {
+          gameId = maybeId;
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    if (!gameId) {
+      console.error("Missing gameId in params, body, and URL", { params, url: req.url });
+      return NextResponse.json({ message: "Missing game id" }, { status: 400 });
+    }
+
+    console.debug("Resolved gameId for play", { gameId });
 
     // Verify game exists
     const game = await prisma.game.findUnique({
@@ -67,8 +103,11 @@ export async function POST(
     return NextResponse.json(session, { status: 201 });
   } catch (error) {
     console.error("Play game error:", error);
+    // Return error details in development to aid debugging
+    const message = (error as any)?.message || "Internal server error";
+    const stack = (error as any)?.stack || null;
     return NextResponse.json(
-      { message: "Internal server error" },
+      { message, stack },
       { status: 500 }
     );
   }

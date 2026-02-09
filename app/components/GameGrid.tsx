@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Game } from "@/lib/types";
 import { GameCard } from "./GameCard";
 import { SearchBar } from "./SearchBar";
+import { GamePlayModal } from "./GamePlayModal";
 import { useGames } from "../hooks/useGames";
 
 interface GameGridProps {
@@ -29,6 +30,8 @@ export function GameGrid({
   );
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [provider, setProvider] = useState(searchParams.get("provider") || "");
+  const [playingGame, setPlayingGame] = useState<Game | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const limit = 12;
 
@@ -83,28 +86,61 @@ export function GameGrid({
 
   const handlePlay = async (gameId: string) => {
     const token = localStorage.getItem("auth_token");
+    console.debug("handlePlay called", { gameId, token });
+    if (!gameId) {
+      console.error("handlePlay called with empty gameId", { gameId });
+      alert("Invalid game selected");
+      return;
+    }
     if (!token) {
       alert("Please log in to play a game");
       return;
     }
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/games/${gameId}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      try {
+      // Sanitize gameId and log request URL for debugging
+      const safeId = String(gameId ?? "");
+      if (!safeId || safeId === "undefined" || safeId === "null") {
+        console.error("Invalid gameId before fetch", { gameId, safeId });
+        alert("Invalid game selected");
+        return;
+      }
+
+      const url = `/api/games/${encodeURIComponent(safeId)}`;
+      console.debug("About to POST to", url);
+
+      // Use same-origin API route to avoid env base-url mismatch
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.ok) {
-        alert("Game session started!");
-      } else {
-        alert("Failed to start game session");
+        const sessionData = await response.json();
+        // Find the game object in the games array to pass to modal
+        const game = games.find((g) => g.id === gameId);
+        if (game) {
+          setPlayingGame(game);
+          setSessionId(sessionData.id || sessionData.session?.id || gameId);
+        } else {
+          alert("Game not found");
+        }
+        return;
       }
+
+      // Try to parse error message from server for debugging
+      let errBody: any = null;
+      try {
+        errBody = await response.json();
+      } catch (e) {
+        // ignore JSON parse errors
+      }
+
+      console.error("Play game failed", response.status, errBody);
+      alert(errBody?.message || `Failed to start game session (status ${response.status})`);
     } catch (err) {
       console.error("Play game error:", err);
       alert("Error starting game session");
@@ -229,6 +265,19 @@ export function GameGrid({
             <p className="text-gray-600">Try adjusting your filters</p>
           </div>
         </div>
+      )}
+
+      {/* Game Play Modal */}
+      {playingGame && (
+        <GamePlayModal
+          game={playingGame}
+          token={localStorage.getItem("auth_token") || ""}
+          sessionId={sessionId || ""}
+          onClose={() => {
+            setPlayingGame(null);
+            setSessionId(null);
+          }}
+        />
       )}
     </div>
   );
