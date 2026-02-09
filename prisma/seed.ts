@@ -63,10 +63,8 @@ async function main() {
       data: {
         title: "Golden Fortune",
         provider: "NetEnt",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Spin to win with our classic 3-reel slot machine featuring golden symbols and lucky sevens.",
+        thumbnail: `/images/games/slots/Golden Fortune.jpeg`,
+        description: "Spin to win with our classic 3-reel slot machine featuring golden symbols and lucky sevens.",
         category: GameCategory.SLOT,
         popularity: 95,
         isActive: true,
@@ -76,10 +74,8 @@ async function main() {
       data: {
         title: "Diamond Dreams",
         provider: "Microgaming",
-        thumbnail:
-          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300",
-        description:
-          "Match diamonds and jewels to unlock big jackpots in this high-volatility slot game.",
+        thumbnail: `/images/games/slots/Diamond Dreams.jpeg`,
+        description: "Match diamonds and jewels to unlock big jackpots in this high-volatility slot game.",
         category: GameCategory.SLOT,
         popularity: 87,
         isActive: true,
@@ -89,10 +85,8 @@ async function main() {
       data: {
         title: "Lucky Leprechaun",
         provider: "Playtech",
-        thumbnail:
-          "https://images.unsplash.com/photo-1551614439-32e7d94f3d5a?w=300",
-        description:
-          "Find the leprechaun's pot of gold and claim your winnings in this Irish-themed slot game.",
+        thumbnail: `/images/games/slots/Lucky Leprechaun.jpeg`,
+        description: "Find the leprechaun's pot of gold and claim your winnings in this Irish-themed slot game.",
         category: GameCategory.SLOT,
         popularity: 76,
         isActive: true,
@@ -102,10 +96,8 @@ async function main() {
       data: {
         title: "Aztec Gold",
         provider: "Pragmatic Play",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Explore ancient Aztec treasures and uncover hidden riches in this adventure slot.",
+        thumbnail: `/images/games/slots/Aztec Gold.jpeg`,
+        description: "Explore ancient Aztec treasures and uncover hidden riches in this adventure slot.",
         category: GameCategory.SLOT,
         popularity: 82,
         isActive: true,
@@ -115,10 +107,8 @@ async function main() {
       data: {
         title: "Book of Mysteries",
         provider: "Evolution Gaming",
-        thumbnail:
-          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300",
-        description:
-          "Uncover the secrets of an ancient book and trigger free spins and multipliers.",
+        thumbnail: `/images/games/slots/Book of Mysteries.jpeg`,
+        description: "Uncover the secrets of an ancient book and trigger free spins and multipliers.",
         category: GameCategory.SLOT,
         popularity: 79,
         isActive: true,
@@ -128,10 +118,8 @@ async function main() {
       data: {
         title: "Cosmic Cash",
         provider: "NetEnt",
-        thumbnail:
-          "https://images.unsplash.com/photo-1546880285-f67f2e6bc7c8?w=300",
-        description:
-          "Launch into space and collect cosmic rewards in this futuristic slot adventure.",
+        thumbnail: `/images/games/slots/Cosmic Cash.jpeg`,
+        description: "Launch into space and collect cosmic rewards in this futuristic slot adventure.",
         category: GameCategory.SLOT,
         popularity: 85,
         isActive: true,
@@ -141,10 +129,8 @@ async function main() {
       data: {
         title: "Fire Blaze",
         provider: "Microgaming",
-        thumbnail:
-          "https://images.unsplash.com/photo-1551614439-32e7d94f3d5a?w=300",
-        description:
-          "Hot symbols and blazing multipliers await in this fiery slot experience.",
+        thumbnail: `/images/games/slots/Fire Blaze.jpeg`,
+        description: "Hot symbols and blazing multipliers await in this fiery slot experience.",
         category: GameCategory.SLOT,
         popularity: 81,
         isActive: true,
@@ -154,10 +140,8 @@ async function main() {
       data: {
         title: "Treasure Island",
         provider: "Pragmatic Play",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Sail the seas and discover treasure on this island-themed slot game.",
+        thumbnail: `/images/games/slots/Treasure Island.jpeg`,
+        description: "Sail the seas and discover treasure on this island-themed slot game.",
         category: GameCategory.SLOT,
         popularity: 77,
         isActive: true,
@@ -171,10 +155,8 @@ async function main() {
       data: {
         title: "Live Blackjack",
         provider: "Evolution Gaming",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Play blackjack with a live dealer streamed directly from our gaming studio.",
+        thumbnail: `/images/games/live/Live Blackjack.jpeg`,
+        description: "Play blackjack with a live dealer streamed directly from our gaming studio.",
         category: GameCategory.LIVE,
         popularity: 92,
         isActive: true,
@@ -184,10 +166,8 @@ async function main() {
       data: {
         title: "Live Roulette",
         provider: "Playtech",
-        thumbnail:
-          "https://images.unsplash.com/photo-1549560707-5f61ae1ba51a?w=300",
-        description:
-          "Classic roulette with a real dealer. Watch the wheel spin in real-time.",
+        thumbnail: `/images/games/live/Live Roulette.jpeg`,
+        description: "Classic roulette with a real dealer. Watch the wheel spin in real-time.",
         category: GameCategory.LIVE,
         popularity: 88,
         isActive: true,
@@ -197,10 +177,8 @@ async function main() {
       data: {
         title: "Live Baccarat",
         provider: "NetEnt",
-        thumbnail:
-          "https://images.unsplash.com/photo-1549560707-5f61ae1ba51a?w=300",
-        description:
-          "Experience elegant baccarat with professional live dealers.",
+        thumbnail: `/images/games/live/Live Baccarat.jpeg`,
+        description: "Experience elegant baccarat with professional live dealers.",
         category: GameCategory.LIVE,
         popularity: 85,
         isActive: true,
@@ -210,10 +188,8 @@ async function main() {
       data: {
         title: "Live Casino Hold'em",
         provider: "Pragmatic Play",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Play against the dealer in this exciting live poker variant.",
+        thumbnail: `/images/games/live/Live Casino Hold'em.jpeg`,
+        description: "Play against the dealer in this exciting live poker variant.",
         category: GameCategory.LIVE,
         popularity: 80,
         isActive: true,
@@ -227,10 +203,8 @@ async function main() {
       data: {
         title: "Poker Pro",
         provider: "Microgaming",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Texas Hold'em Poker with multiple difficulty levels and strategic gameplay.",
+        thumbnail: `/images/games/table/Poker Pro.jpeg`,
+        description: "Texas Hold'em Poker with multiple difficulty levels and strategic gameplay.",
         category: GameCategory.TABLE,
         popularity: 84,
         isActive: true,
@@ -240,10 +214,8 @@ async function main() {
       data: {
         title: "Baccarat Elite",
         provider: "NetEnt",
-        thumbnail:
-          "https://images.unsplash.com/photo-1549560707-5f61ae1ba51a?w=300",
-        description:
-          "Elegant baccarat game with multiple betting options and side bets.",
+        thumbnail: `/images/games/table/Baccarat Elite.jpeg`,
+        description: "Elegant baccarat game with multiple betting options and side bets.",
         category: GameCategory.TABLE,
         popularity: 78,
         isActive: true,
@@ -253,10 +225,8 @@ async function main() {
       data: {
         title: "European Roulette",
         provider: "Playtech",
-        thumbnail:
-          "https://images.unsplash.com/photo-1549560707-5f61ae1ba51a?w=300",
-        description:
-          "Classic European roulette with single zero. Test your luck and strategy.",
+        thumbnail: `/images/games/table/European Roulette.jpeg`,
+        description: "Classic European roulette with single zero. Test your luck and strategy.",
         category: GameCategory.TABLE,
         popularity: 82,
         isActive: true,
@@ -266,10 +236,8 @@ async function main() {
       data: {
         title: "Three Card Poker",
         provider: "Evolution Gaming",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Fast-paced poker variant with straightforward rules and big payouts.",
+        thumbnail: `/images/games/table/Three Card Poker.jpeg`,
+        description: "Fast-paced poker variant with straightforward rules and big payouts.",
         category: GameCategory.TABLE,
         popularity: 75,
         isActive: true,
@@ -283,10 +251,8 @@ async function main() {
       data: {
         title: "Mega Jackpot Slots",
         provider: "Pragmatic Play",
-        thumbnail:
-          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
-        description:
-          "Progressive jackpot game with prize pool growing with every play. Current jackpot: $500,000+",
+        thumbnail: `/images/games/jackpot/Mega Jackpot Slots.jpeg`,
+        description: "Progressive jackpot game with prize pool growing with every play. Current jackpot: $500,000+",
         category: GameCategory.JACKPOT,
         popularity: 99,
         isActive: true,
@@ -296,10 +262,8 @@ async function main() {
       data: {
         title: "Golden Jackpot",
         provider: "Playtech",
-        thumbnail:
-          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300",
-        description:
-          "Hit the golden combination to trigger the multi-million jackpot.",
+        thumbnail: `/images/games/jackpot/Golden Jackpot.jpeg`,
+        description: "Hit the golden combination to trigger the multi-million jackpot.",
         category: GameCategory.JACKPOT,
         popularity: 97,
         isActive: true,
@@ -309,10 +273,8 @@ async function main() {
       data: {
         title: "Cosmic Jackpot",
         provider: "NetEnt",
-        thumbnail:
-          "https://images.unsplash.com/photo-1546880285-f67f2e6bc7c8?w=300",
-        description:
-          "Reach for the stars and claim the cosmic jackpot prize.",
+        thumbnail: `/images/games/jackpot/Cosmic Jackpot.jpeg`,
+        description: "Reach for the stars and claim the cosmic jackpot prize.",
         category: GameCategory.JACKPOT,
         popularity: 94,
         isActive: true,
@@ -322,10 +284,8 @@ async function main() {
       data: {
         title: "Royal Jackpot",
         provider: "Microgaming",
-        thumbnail:
-          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300",
-        description:
-          "Feel like royalty when you trigger this premium jackpot experience.",
+        thumbnail: `/images/games/jackpot/Royal Jackpot.jpeg`,
+        description: "Feel like royalty when you trigger this premium jackpot experience.",
         category: GameCategory.JACKPOT,
         popularity: 91,
         isActive: true,
