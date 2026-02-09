@@ -71,7 +71,7 @@ const SearchBarComponent = ({
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 rounded-md border border-gray-300 px-4 py-3 text-sm placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="flex-1 rounded-md border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             disabled={loading}
           />
           <button
@@ -98,7 +98,7 @@ const SearchBarComponent = ({
             id="category"
             value={currentCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             disabled={loading}
           >
             <option value="">All Categories</option>
@@ -121,7 +121,7 @@ const SearchBarComponent = ({
             id="provider"
             value={currentProvider}
             onChange={(e) => onProviderChange(e.target.value)}
-            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             disabled={loading}
           >
             <option value="">All Providers</option>
@@ -145,7 +145,7 @@ const SearchBarComponent = ({
             id="sort"
             value={currentSort}
             onChange={(e) => onSortChange(e.target.value)}
-            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             disabled={loading}
           >
             <option value="popularity">Popularity</option>
