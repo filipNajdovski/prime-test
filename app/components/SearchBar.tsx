@@ -2,7 +2,6 @@
 
 import { useState, useMemo, memo } from "react";
 import { Game } from "@/lib/types";
-import { useGames } from "../hooks/useGames";
 
 interface SearchBarProps {
   onSearchChange: (search: string) => void;

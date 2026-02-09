@@ -20,7 +20,7 @@ export async function POST(
       try {
         const body = await req.json();
         gameId = body?.gameId || body?.id || gameId;
-      } catch (e) {
+      } catch {
         // ignore
       }
     }
@@ -34,7 +34,7 @@ export async function POST(
         if (maybeId && maybeId !== "api" && maybeId !== "games" && maybeId !== "end") {
           gameId = maybeId;
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     }

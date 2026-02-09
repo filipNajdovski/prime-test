@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Build filter
-    const where: any = {
+    const where: Record<string, unknown> = {
       isActive: true,
     };
 
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Build order
-    let orderBy: any = { popularity: "desc" };
+    let orderBy: Record<string, string> = { popularity: "desc" };
     if (sort === "name") {
       orderBy = { title: "asc" };
     } else if (sort === "newest") {

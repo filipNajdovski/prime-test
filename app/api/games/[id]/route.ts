@@ -57,7 +57,7 @@ export async function POST(
       try {
         const body = await req.json();
         gameId = body?.gameId || body?.id || gameId;
-      } catch (e) {
+      } catch {
         // ignore parse errors
       }
     }
@@ -71,7 +71,7 @@ export async function POST(
         if (maybeId && maybeId !== "api" && maybeId !== "games") {
           gameId = maybeId;
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     }
@@ -104,8 +104,12 @@ export async function POST(
   } catch (error) {
     console.error("Play game error:", error);
     // Return error details in development to aid debugging
-    const message = (error as any)?.message || "Internal server error";
-    const stack = (error as any)?.stack || null;
+    let message = "Internal server error";
+    let stack: string | null = null;
+    if (error instanceof Error) {
+      message = error.message;
+      stack = error.stack || null;
+    }
     return NextResponse.json(
       { message, stack },
       { status: 500 }

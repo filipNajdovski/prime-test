@@ -55,7 +55,7 @@ export function GameGrid({
   });
 
   const allGames = useMemo(() => allGamesList, [allGamesList]);
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   // Favorites state
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
@@ -72,7 +72,7 @@ export function GameGrid({
     if (provider) params.append("provider", provider);
 
     const queryString = params.toString();
-    router.push(queryString ? `?${queryString}` : "", { shallow: true } as any);
+    router.push(queryString ? `?${queryString}` : "");
   }, [page, sort, category, search, provider, router, defaultSort]);
 
   const handlePrevPage = () => {
@@ -107,8 +107,8 @@ export function GameGrid({
         });
         if (!res.ok) return;
         const favs = await res.json();
-        const ids = new Set<string>(favs.map((f: any) => f.game.id));
-        const gamesList = favs.map((f: any) => f.game as Game);
+        const ids = new Set<string>(favs.map((f: { game: { id: string } }) => f.game.id));
+        const gamesList = favs.map((f: { game: Game }) => f.game);
         setFavoriteIds(ids);
         setFavoriteGames(gamesList);
       } catch (err) {
@@ -167,15 +167,15 @@ export function GameGrid({
       }
 
       // Try to parse error message from server for debugging
-      let errBody: any = null;
+      let errBody: unknown = null;
       try {
         errBody = await response.json();
-      } catch (e) {
+      } catch {
         // ignore JSON parse errors
       }
 
       console.error("Play game failed", response.status, errBody);
-      alert(errBody?.message || `Failed to start game session (status ${response.status})`);
+      alert((errBody as { message?: string })?.message || `Failed to start game session (status ${response.status})`);
     } catch (err) {
       console.error("Play game error:", err);
       alert("Error starting game session");
@@ -341,7 +341,7 @@ export function GameGrid({
                 key={game.id}
                 game={game}
                 onPlay={handlePlay}
-                onFavoriteToggle={(gameId, isFav) => handleFavoriteToggle(gameId, isFav)}
+                onFavoriteToggle={handleFavoriteToggle}
                 isFavorited={favoriteIds.has(game.id)}
               />
             ))}

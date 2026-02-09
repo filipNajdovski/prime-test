@@ -293,7 +293,7 @@ async function main() {
     }),
   ]);
 
-  const allGames = [...slotGames, ...liveGames, ...tableGames, ...jackpotGames];
+  // const allGames = [...slotGames, ...liveGames, ...tableGames, ...jackpotGames];
 
   console.log("Creating favorites...");
 

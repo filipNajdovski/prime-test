@@ -14,7 +14,7 @@ interface GamePlayModalProps {
 export function GamePlayModal({
   game,
   token,
-  sessionId,
+  // sessionId,
   onClose,
 }: GamePlayModalProps) {
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ export function GamePlayModal({
             className="object-cover"
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
             <h2 className="text-3xl font-bold">{game.title}</h2>
             <p className="text-sm text-gray-200">{game.provider}</p>
@@ -123,7 +123,7 @@ export function GamePlayModal({
             <p className="text-sm text-gray-600">Game Screen Placeholder</p>
             <p className="mt-2 text-2xl font-bold text-gray-400">🎮</p>
             <p className="mt-2 text-gray-600">
-              Game session active. Click "Exit Game" to end your session.
+              Game session active. Click &quot;Exit Game&quot; to end your session.
             </p>
           </div>
 
