@@ -91,13 +91,16 @@ export function GameCard({
           </button>
           <button
             onClick={() => onFavoriteToggle?.(game.id, !isFavorited)}
-            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+            aria-pressed={isFavorited}
+            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
               isFavorited
                 ? "bg-red-100 text-red-700 hover:bg-red-200"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            {isFavorited ? "❤️" : "🤍"}
+            <span className="text-sm">
+              {isFavorited ? "❤️" : "🤍"}
+            </span>
           </button>
         </div>
       </div>
