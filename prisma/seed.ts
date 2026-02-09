@@ -56,7 +56,8 @@ async function main() {
 
   console.log("Creating games...");
 
-  // SLOT Games
+  // Providers: NetEnt, Microgaming, Playtech, Evolution Gaming, Pragmatic Play
+  // SLOT Games (8 games)
   const slotGames = await Promise.all([
     prisma.game.create({
       data: {
@@ -97,9 +98,74 @@ async function main() {
         isActive: true,
       },
     }),
+    prisma.game.create({
+      data: {
+        title: "Aztec Gold",
+        provider: "Pragmatic Play",
+        thumbnail:
+          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
+        description:
+          "Explore ancient Aztec treasures and uncover hidden riches in this adventure slot.",
+        category: GameCategory.SLOT,
+        popularity: 82,
+        isActive: true,
+      },
+    }),
+    prisma.game.create({
+      data: {
+        title: "Book of Mysteries",
+        provider: "Evolution Gaming",
+        thumbnail:
+          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300",
+        description:
+          "Uncover the secrets of an ancient book and trigger free spins and multipliers.",
+        category: GameCategory.SLOT,
+        popularity: 79,
+        isActive: true,
+      },
+    }),
+    prisma.game.create({
+      data: {
+        title: "Cosmic Cash",
+        provider: "NetEnt",
+        thumbnail:
+          "https://images.unsplash.com/photo-1546880285-f67f2e6bc7c8?w=300",
+        description:
+          "Launch into space and collect cosmic rewards in this futuristic slot adventure.",
+        category: GameCategory.SLOT,
+        popularity: 85,
+        isActive: true,
+      },
+    }),
+    prisma.game.create({
+      data: {
+        title: "Fire Blaze",
+        provider: "Microgaming",
+        thumbnail:
+          "https://images.unsplash.com/photo-1551614439-32e7d94f3d5a?w=300",
+        description:
+          "Hot symbols and blazing multipliers await in this fiery slot experience.",
+        category: GameCategory.SLOT,
+        popularity: 81,
+        isActive: true,
+      },
+    }),
+    prisma.game.create({
+      data: {
+        title: "Treasure Island",
+        provider: "Pragmatic Play",
+        thumbnail:
+          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
+        description:
+          "Sail the seas and discover treasure on this island-themed slot game.",
+        category: GameCategory.SLOT,
+        popularity: 77,
+        isActive: true,
+      },
+    }),
   ]);
 
-  // LIVE Games
+  // LIVE Games (4 games)
   const liveGames = await Promise.all([
     prisma.game.create({
       data: {
@@ -127,9 +193,35 @@ async function main() {
         isActive: true,
       },
     }),
+    prisma.game.create({
+      data: {
+        title: "Live Baccarat",
+        provider: "NetEnt",
+        thumbnail:
+          "https://images.unsplash.com/photo-1549560707-5f61ae1ba51a?w=300",
+        description:
+          "Experience elegant baccarat with professional live dealers.",
+        category: GameCategory.LIVE,
+        popularity: 85,
+        isActive: true,
+      },
+    }),
+    prisma.game.create({
+      data: {
+        title: "Live Casino Hold'em",
+        provider: "Pragmatic Play",
+        thumbnail:
+          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
+        description:
+          "Play against the dealer in this exciting live poker variant.",
+        category: GameCategory.LIVE,
+        popularity: 80,
+        isActive: true,
+      },
+    }),
   ]);
 
-  // TABLE Games
+  // TABLE Games (4 games)
   const tableGames = await Promise.all([
     prisma.game.create({
       data: {
@@ -157,14 +249,40 @@ async function main() {
         isActive: true,
       },
     }),
+    prisma.game.create({
+      data: {
+        title: "European Roulette",
+        provider: "Playtech",
+        thumbnail:
+          "https://images.unsplash.com/photo-1549560707-5f61ae1ba51a?w=300",
+        description:
+          "Classic European roulette with single zero. Test your luck and strategy.",
+        category: GameCategory.TABLE,
+        popularity: 82,
+        isActive: true,
+      },
+    }),
+    prisma.game.create({
+      data: {
+        title: "Three Card Poker",
+        provider: "Evolution Gaming",
+        thumbnail:
+          "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
+        description:
+          "Fast-paced poker variant with straightforward rules and big payouts.",
+        category: GameCategory.TABLE,
+        popularity: 75,
+        isActive: true,
+      },
+    }),
   ]);
 
-  // JACKPOT Games
+  // JACKPOT Games (4 games)
   const jackpotGames = await Promise.all([
     prisma.game.create({
       data: {
         title: "Mega Jackpot Slots",
-        provider: "Progressive",
+        provider: "Pragmatic Play",
         thumbnail:
           "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300",
         description:
@@ -187,38 +305,85 @@ async function main() {
         isActive: true,
       },
     }),
+    prisma.game.create({
+      data: {
+        title: "Cosmic Jackpot",
+        provider: "NetEnt",
+        thumbnail:
+          "https://images.unsplash.com/photo-1546880285-f67f2e6bc7c8?w=300",
+        description:
+          "Reach for the stars and claim the cosmic jackpot prize.",
+        category: GameCategory.JACKPOT,
+        popularity: 94,
+        isActive: true,
+      },
+    }),
+    prisma.game.create({
+      data: {
+        title: "Royal Jackpot",
+        provider: "Microgaming",
+        thumbnail:
+          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300",
+        description:
+          "Feel like royalty when you trigger this premium jackpot experience.",
+        category: GameCategory.JACKPOT,
+        popularity: 91,
+        isActive: true,
+      },
+    }),
   ]);
 
   const allGames = [...slotGames, ...liveGames, ...tableGames, ...jackpotGames];
 
   console.log("Creating favorites...");
 
-  // Add some favorites
+  // Add some favorites for each user
   await prisma.favorite.create({
     data: {
       userId: user1.id,
-      gameId: slotGames[0].id,
+      gameId: slotGames[0].id, // Golden Fortune
     },
   });
 
   await prisma.favorite.create({
     data: {
       userId: user1.id,
-      gameId: liveGames[0].id,
+      gameId: slotGames[3].id, // Aztec Gold
+    },
+  });
+
+  await prisma.favorite.create({
+    data: {
+      userId: user1.id,
+      gameId: liveGames[0].id, // Live Blackjack
     },
   });
 
   await prisma.favorite.create({
     data: {
       userId: user2.id,
-      gameId: jackpotGames[0].id,
+      gameId: jackpotGames[0].id, // Mega Jackpot Slots
+    },
+  });
+
+  await prisma.favorite.create({
+    data: {
+      userId: user2.id,
+      gameId: tableGames[0].id, // Poker Pro
     },
   });
 
   await prisma.favorite.create({
     data: {
       userId: user3.id,
-      gameId: tableGames[1].id,
+      gameId: tableGames[1].id, // Baccarat Elite
+    },
+  });
+
+  await prisma.favorite.create({
+    data: {
+      userId: user3.id,
+      gameId: liveGames[1].id, // Live Roulette
     },
   });
 
@@ -231,7 +396,7 @@ async function main() {
   await prisma.gameSession.create({
     data: {
       userId: user1.id,
-      gameId: slotGames[0].id,
+      gameId: slotGames[0].id, // Golden Fortune
       startedAt: new Date(now.getTime() - 60 * 60 * 1000), // 1 hour ago
       endedAt: new Date(now.getTime() - 50 * 60 * 1000),
     },
@@ -240,7 +405,7 @@ async function main() {
   await prisma.gameSession.create({
     data: {
       userId: user1.id,
-      gameId: liveGames[0].id,
+      gameId: liveGames[0].id, // Live Blackjack
       startedAt: new Date(now.getTime() - 30 * 60 * 1000), // 30 minutes ago
       endedAt: null, // Still playing
     },
@@ -250,7 +415,7 @@ async function main() {
   await prisma.gameSession.create({
     data: {
       userId: user2.id,
-      gameId: jackpotGames[0].id,
+      gameId: jackpotGames[0].id, // Mega Jackpot Slots
       startedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000), // 2 hours ago
       endedAt: new Date(now.getTime() - 1.5 * 60 * 60 * 1000),
     },
@@ -260,7 +425,7 @@ async function main() {
   await prisma.gameSession.create({
     data: {
       userId: user3.id,
-      gameId: tableGames[1].id,
+      gameId: tableGames[1].id, // Baccarat Elite
       startedAt: new Date(now.getTime() - 15 * 60 * 1000), // 15 minutes ago
       endedAt: null, // Still playing
     },
@@ -269,9 +434,18 @@ async function main() {
   await prisma.gameSession.create({
     data: {
       userId: user3.id,
-      gameId: slotGames[1].id,
+      gameId: slotGames[1].id, // Diamond Dreams
       startedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000), // 4 hours ago
       endedAt: new Date(now.getTime() - 3.5 * 60 * 60 * 1000),
+    },
+  });
+
+  await prisma.gameSession.create({
+    data: {
+      userId: user1.id,
+      gameId: tableGames[2].id, // European Roulette
+      startedAt: new Date(now.getTime() - 3 * 60 * 60 * 1000), // 3 hours ago
+      endedAt: new Date(now.getTime() - 2.5 * 60 * 60 * 1000),
     },
   });
 
@@ -279,9 +453,10 @@ async function main() {
   console.log(`
   📊 Seeded Data Summary:
   - Users: 3
-  - Games: 8
-  - Favorites: 4
-  - Game Sessions: 5
+  - Games: 20 (8 Slots, 4 Live, 4 Table, 4 Jackpot)
+  - Providers: 5 (NetEnt, Microgaming, Playtech, Evolution Gaming, Pragmatic Play)
+  - Favorites: 7
+  - Game Sessions: 6
 
   🎮 Sample Credentials:
   1. john@example.com / johndoe / password123
