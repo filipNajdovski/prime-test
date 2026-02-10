@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Casino Lobby",
+  title: "Casino Lobby Prime",
   description: "Browse and play premium casino games",
 };
 

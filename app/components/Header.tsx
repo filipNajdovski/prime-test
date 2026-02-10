@@ -16,7 +16,7 @@ export function Header() {
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl lg:text-3xl font-bold text-gray-900">Prime Test Casino Lobby</h1>
+              <h1 className="text-xl lg:text-3xl font-bold text-gray-900">Casino Lobby</h1>
               <p className="mt-2 text-gray-600">
                 Browse and play our premium selection of casino games
               </p>
