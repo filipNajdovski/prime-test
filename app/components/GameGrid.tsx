@@ -317,7 +317,7 @@ export function GameGrid({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveView("all")}
-            className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
+            className={`rounded-md px-3 py-1 text-xs md:text-sm font-medium transition-colors ${
               activeView === "all"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -327,7 +327,7 @@ export function GameGrid({
           </button>
           <button
             onClick={() => setActiveView("favorites")}
-            className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
+            className={`rounded-md px-3 py-1 text-xs md:text-sm font-medium transition-colors ${
               activeView === "favorites"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -338,7 +338,7 @@ export function GameGrid({
           {isAuthenticated && recentGames.length > 0 && (
             <button
               onClick={() => setActiveView("recent")}
-              className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
+              className={`rounded-md px-3 py-1 text-xs md:text-sm font-medium transition-colors ${
                 activeView === "recent"
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
