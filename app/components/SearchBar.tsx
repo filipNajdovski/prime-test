@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo, memo } from "react";
+import { useState, useMemo, memo, useEffect } from "react";
 import { Game } from "@/lib/types";
+import { useDebounce } from "../hooks/useDebounce";
 
 interface SearchBarProps {
   onSearchChange: (search: string) => void;
@@ -31,6 +32,17 @@ const SearchBarComponent = ({
   loading = false,
 }: SearchBarProps) => {
   const [localSearch, setLocalSearch] = useState(currentSearch);
+  const debouncedSearch = useDebounce(localSearch, 400);
+
+  useEffect(() => {
+    setLocalSearch(currentSearch);
+  }, [currentSearch]);
+
+  useEffect(() => {
+    if (debouncedSearch !== currentSearch) {
+      onSearchChange(debouncedSearch);
+    }
+  }, [debouncedSearch, currentSearch, onSearchChange]);
 
   // Handle search button click or Enter key
   const handleSearch = () => {

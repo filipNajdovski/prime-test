@@ -166,7 +166,7 @@ export function GameGrid({
         return;
       }
 
-      const url = `/api/games/${encodeURIComponent(safeId)}`;
+      const url = `/api/games/${encodeURIComponent(safeId)}/play`;
       console.debug("About to POST to", url);
 
       // Use same-origin API route to avoid env base-url mismatch

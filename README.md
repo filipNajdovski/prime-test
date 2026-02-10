@@ -17,6 +17,8 @@ Full-stack casino game lobby built with Next.js App Router, Prisma, and PostgreS
 - Favorites (persisted in DB)
 - JWT login/register with protected endpoints
 - Local game thumbnails from `public/images/games/**`
+- Recently played games section (bonus)
+- Dark mode toggle (bonus)
 
 ## Project Structure
 
@@ -104,8 +106,9 @@ All endpoints return JSON and proper HTTP status codes.
 		}
 		```
 - `GET /api/games/:id` - Get game details
-- `POST /api/games/:id` - Start a game session (auth required)
+- `POST /api/games/:id/play` - Start a game session (auth required)
 - `POST /api/games/:id/end` - End the latest open session (auth required)
+- `GET /api/games/recent` - Recently played games (auth required)
 
 ### Favorites (Auth Required)
 
@@ -148,6 +151,16 @@ The seed script inserts:
 - App Router + Route Handlers for a clean full-stack structure
 - Prisma for schema clarity and easy migrations
 - JWT auth for simplicity and compatibility with Next.js Route Handlers
+
+## Libraries Used
+
+- `bcryptjs` for password hashing
+- `jsonwebtoken` for JWT creation/verification
+- `@prisma/adapter-pg` for Prisma + Postgres adapter usage
+
+## Limitations
+
+- Reviews are not implemented in this submission.
 
 ## Development Notes
 
