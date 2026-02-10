@@ -51,23 +51,6 @@ export function Header() {
               </div>
             </div>
 
-            <button
-              onClick={toggleTheme}
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:bg-gray-50 dark:border-slate-700 dark:text-gray-200 dark:hover:bg-slate-900"
-              aria-label="Toggle dark mode"
-              title="Toggle dark mode"
-            >
-              {theme === "dark" ? (
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="4" />
-                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
-                </svg>
-              )}
-            </button>
 
             {/* Auth Section */}
             <div className="flex items-center gap-4">
@@ -147,6 +130,24 @@ export function Header() {
                 </>
               )}
             </div>
+
+            <button
+              onClick={toggleTheme}
+              className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:bg-gray-50 dark:border-slate-700 dark:text-gray-200 dark:hover:bg-slate-900 sm:flex h-10 w-10"
+              aria-label="Toggle dark mode"
+              title="Toggle dark mode"
+            >
+              {theme === "dark" ? (
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
@@ -190,6 +191,7 @@ export function Header() {
           </div>
 
           <div className="mt-6 space-y-3">
+            
             {isAuthenticated && user ? (
               <button
                 onClick={() => {
@@ -222,6 +224,24 @@ export function Header() {
                 </button>
               </>
             )}
+
+            <button
+              onClick={toggleTheme}
+              className="flex justify-self-end items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:bg-gray-50 dark:border-slate-700 dark:text-gray-200 dark:hover:bg-slate-900 sm:flex h-10 w-10"
+              aria-label="Toggle dark mode"
+              title="Toggle dark mode"
+            >
+              {theme === "dark" ? (
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
