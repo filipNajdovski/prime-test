@@ -27,9 +27,9 @@ export function GameCard({
   };
 
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md transition-shadow hover:shadow-lg">
+    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md transition-shadow hover:shadow-lg dark:border-slate-800 dark:bg-slate-950">
       {/* Game Thumbnail */}
-      <div className="relative h-40 w-full overflow-hidden bg-gray-200">
+      <div className="relative h-40 w-full overflow-hidden bg-gray-200 dark:bg-slate-800">
         <Image
           src={game.thumbnail}
           alt={game.title}
@@ -42,12 +42,12 @@ export function GameCard({
       {/* Card Content */}
       <div className="p-4">
         {/* Title */}
-        <h3 className="truncate text-lg font-semibold text-gray-900">
+        <h3 className="truncate text-lg font-semibold text-gray-900 dark:text-gray-100">
           {game.title}
         </h3>
 
         {/* Provider */}
-        <p className="truncate text-sm text-gray-500">{game.provider}</p>
+        <p className="truncate text-sm text-gray-500 dark:text-gray-400">{game.provider}</p>
 
         {/* Category Badge */}
         <div className="mt-2 mb-3 inline-block">
@@ -59,17 +59,17 @@ export function GameCard({
         </div>
 
         {/* Description (2 lines max) */}
-        <p className="line-clamp-2 text-sm text-gray-600">
+        <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-300">
           {game.description}
         </p>
 
         {/* Popularity */}
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <span className="text-xs font-medium text-gray-700">
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
               Popularity:
             </span>
-            <div className="h-2 w-20 rounded-full bg-gray-200">
+            <div className="h-2 w-20 rounded-full bg-gray-200 dark:bg-slate-800">
               <div
                 className="h-full rounded-full bg-green-500"
                 style={{ width: `${game.popularity}%` }}
@@ -95,7 +95,7 @@ export function GameCard({
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
               isFavorited
                 ? "bg-red-100 text-red-700 hover:bg-red-200"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-200 dark:hover:bg-slate-700"
             }`}
           >
             <span className="text-sm">

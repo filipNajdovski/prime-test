@@ -53,12 +53,12 @@ const SearchBarComponent = ({
     currentSearch || currentCategory || currentProvider || currentSort !== "popularity";
 
   return (
-    <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       {/* Search Input with Button */}
       <div>
         <label
           htmlFor="search"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Search Games
         </label>
@@ -70,7 +70,7 @@ const SearchBarComponent = ({
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 rounded-md border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="flex-1 rounded-md border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-gray-100 dark:placeholder-gray-500"
             disabled={loading}
           />
           <button
@@ -89,7 +89,7 @@ const SearchBarComponent = ({
         <div>
           <label
             htmlFor="category"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Category
           </label>
@@ -97,7 +97,7 @@ const SearchBarComponent = ({
             id="category"
             value={currentCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-gray-100"
             disabled={loading}
           >
             <option value="">All Categories</option>
@@ -112,7 +112,7 @@ const SearchBarComponent = ({
         <div>
           <label
             htmlFor="provider"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Provider
           </label>
