@@ -109,9 +109,10 @@ export function GameGrid({
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) return;
-        const favs = await res.json();
-        const ids = new Set<string>(favs.map((f: { game: { id: string } }) => f.game.id));
-        const gamesList = favs.map((f: { game: Game }) => f.game);
+        const json = (await res.json()) as { data: Array<{ game: Game; gameId: string }> };
+        const favs = json.data || [];
+        const ids = new Set<string>(favs.map((f) => f.game.id));
+        const gamesList = favs.map((f) => f.game);
         setFavoriteIds(ids);
         setFavoriteGames(gamesList);
       } catch (err) {
@@ -285,6 +286,21 @@ export function GameGrid({
 
   return (
     <div className="space-y-6">
+      {/* Search & Filters */}
+      <SearchBar
+        onSearchChange={handleSearchChange}
+        onCategoryChange={handleCategoryChange}
+        onProviderChange={handleProviderChange}
+        onSortChange={handleSortChange}
+        onClearFilters={handleClearFilters}
+        currentSearch={search}
+        currentCategory={category}
+        currentProvider={provider}
+        currentSort={sort}
+        allGames={allGames}
+        loading={loading}
+      />
+
       {isAuthenticated && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -313,21 +329,6 @@ export function GameGrid({
           )}
         </div>
       )}
-
-      {/* Search & Filters */}
-      <SearchBar
-        onSearchChange={handleSearchChange}
-        onCategoryChange={handleCategoryChange}
-        onProviderChange={handleProviderChange}
-        onSortChange={handleSortChange}
-        onClearFilters={handleClearFilters}
-        currentSearch={search}
-        currentCategory={category}
-        currentProvider={provider}
-        currentSort={sort}
-        allGames={allGames}
-        loading={loading}
-      />
 
       {/* Toggle: All Games / My Favorites */}
       <div className="flex items-center justify-between">

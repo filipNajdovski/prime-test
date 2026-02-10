@@ -7,7 +7,6 @@ declare global {
 }
 
 const connectionString = process.env.DATABASE_URL || process.env.DIRECT_URL;
-let prismaClient: PrismaClient;
 
 if (!connectionString) {
   throw new Error("Missing DATABASE_URL or DIRECT_URL environment variable.");
@@ -16,7 +15,7 @@ if (!connectionString) {
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 
-prismaClient =
+const prismaClient =
   global.prisma ||
   new PrismaClient({
     adapter,

@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(favorites);
+    return NextResponse.json({ data: favorites }, { status: 200 });
   } catch (error) {
     console.error("Get favorites error:", error);
     return NextResponse.json(

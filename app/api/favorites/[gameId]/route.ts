@@ -58,7 +58,7 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(favorite, { status: 201 });
+    return NextResponse.json({ data: favorite }, { status: 201 });
   } catch (error) {
     console.error("Add favorite error:", error instanceof Error ? error.message : error);
     return NextResponse.json(
@@ -100,7 +100,7 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(favorite, { status: 200 });
+    return NextResponse.json({ data: favorite }, { status: 200 });
   } catch (error) {
     console.error("Remove favorite error:", error);
     return NextResponse.json(
