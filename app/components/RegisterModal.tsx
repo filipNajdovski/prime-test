@@ -26,8 +26,9 @@ export function RegisterModal({
     e.preventDefault();
     setError("");
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!strongPassword.test(password)) {
+      setError("Password must be at least 8 characters and include uppercase, lowercase, and a number");
       return;
     }
 
@@ -131,7 +132,7 @@ export function RegisterModal({
               disabled={loading}
             />
             <p className="mt-1 text-xs text-gray-600">
-              At least 6 characters
+              At least 8 characters, with uppercase, lowercase, and a number
             </p>
           </div>
 
