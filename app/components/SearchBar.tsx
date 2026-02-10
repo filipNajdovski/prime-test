@@ -75,16 +75,28 @@ const SearchBarComponent = ({
           Search Games
         </label>
         <div className="mt-2 flex gap-2">
-          <input
-            id="search"
-            type="text"
-            placeholder="Search by game name, provider, or description..."
-            value={localSearch}
-            onChange={(e) => setLocalSearch(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="flex-1 rounded-md border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-gray-100 dark:placeholder-gray-500"
-            disabled={loading}
-          />
+          <div className="relative flex-1">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search by game name, provider, or description..."
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="w-full rounded-md border border-gray-300 px-4 py-3 pr-10 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-gray-100 dark:placeholder-gray-500"
+              disabled={loading}
+            />
+            {localSearch && (
+              <button
+                type="button"
+                onClick={() => onSearchChange("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
           <button
             onClick={handleSearch}
             className="rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
