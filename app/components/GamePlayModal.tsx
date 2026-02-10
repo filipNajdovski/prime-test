@@ -54,7 +54,7 @@ export function GamePlayModal({
         <button
           onClick={handleEndSession}
           disabled={loading}
-          className="absolute top-4 right-4 z-10 rounded-full bg-gray-800 p-2 text-white hover:bg-gray-900 disabled:opacity-50"
+          className="absolute top-4 right-4 z-10 rounded-full bg-gray-800 px-2 py-1 text-white hover:bg-gray-900 disabled:opacity-50"
           title="Close and end session"
         >
           ✕
