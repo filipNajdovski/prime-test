@@ -144,7 +144,7 @@ const SearchBarComponent = ({
             id="provider"
             value={currentProvider}
             onChange={(e) => onProviderChange(e.target.value)}
-            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-gray-100"
             disabled={loading}
           >
             <option value="">All Providers</option>
@@ -160,7 +160,7 @@ const SearchBarComponent = ({
         <div>
           <label
             htmlFor="sort"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Sort By
           </label>
@@ -168,7 +168,7 @@ const SearchBarComponent = ({
             id="sort"
             value={currentSort}
             onChange={(e) => onSortChange(e.target.value)}
-            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-gray-100"
             disabled={loading}
           >
             <option value="popularity">Popularity</option>
@@ -182,7 +182,7 @@ const SearchBarComponent = ({
           <div className="flex items-end">
             <button
               onClick={onClearFilters}
-              className="w-full rounded-md bg-gray-200 px-3 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-300 disabled:opacity-50"
+              className="w-full rounded-md bg-gray-200 px-3 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-slate-800 dark:text-gray-100 dark:hover:bg-slate-700"
               disabled={loading}
             >
               Clear Filters
@@ -195,44 +195,44 @@ const SearchBarComponent = ({
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2 pt-2">
           {currentSearch && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
+            <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900/40 dark:text-blue-200">
               Search: {currentSearch}
               <button
                 onClick={() => onSearchChange("")}
-                className="ml-1 font-bold hover:text-blue-900"
+                className="ml-1 font-bold hover:text-blue-900 dark:hover:text-blue-100"
               >
                 ×
               </button>
             </span>
           )}
           {currentCategory && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-800">
+            <span className="inline-flex items-center gap-1 rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
               Category: {currentCategory}
               <button
                 onClick={() => onCategoryChange("")}
-                className="ml-1 font-bold hover:text-purple-900"
+                className="ml-1 font-bold hover:text-purple-900 dark:hover:text-purple-100"
               >
                 ×
               </button>
             </span>
           )}
           {currentProvider && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
+            <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-900/40 dark:text-green-200">
               Provider: {currentProvider}
               <button
                 onClick={() => onProviderChange("")}
-                className="ml-1 font-bold hover:text-green-900"
+                className="ml-1 font-bold hover:text-green-900 dark:hover:text-green-100"
               >
                 ×
               </button>
             </span>
           )}
           {currentSort !== "popularity" && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800">
+            <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-900/40 dark:text-orange-200">
               Sort: {currentSort}
               <button
                 onClick={() => onSortChange("popularity")}
-                className="ml-1 font-bold hover:text-orange-900"
+                className="ml-1 font-bold hover:text-orange-900 dark:hover:text-orange-100"
               >
                 ×
               </button>
