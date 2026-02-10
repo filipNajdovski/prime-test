@@ -62,7 +62,7 @@ export function GameGrid({
   // Favorites state
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
-  const [showFavorites, setShowFavorites] = useState(false);
+  const [activeView, setActiveView] = useState<"all" | "favorites" | "recent">("all");
 
   // Sync to URL whenever filters change
   useEffect(() => {
@@ -144,6 +144,12 @@ export function GameGrid({
 
     loadRecent();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (activeView === "recent" && recentGames.length === 0 && !recentLoading) {
+      setActiveView("all");
+    }
+  }, [activeView, recentGames.length, recentLoading]);
 
   const handlePlay = async (gameId: string) => {
     const token = localStorage.getItem("auth_token");
@@ -233,7 +239,7 @@ export function GameGrid({
     } else {
       updated.delete(gameId);
       // If viewing favorites, remove from display
-      if (showFavorites) {
+      if (activeView === "favorites") {
         setFavoriteGames((g) => g.filter((x) => x.id !== gameId));
       } else {
         // Not viewing favorites, just remove from the list
@@ -281,8 +287,13 @@ export function GameGrid({
     setPage(1);
   }, []);
 
-  // Decide which list to render depending on favorites toggle
-  const displayedGames = showFavorites ? favoriteGames : games || [];
+  // Decide which list to render depending on view
+  const displayedGames =
+    activeView === "favorites"
+      ? favoriteGames
+      : activeView === "recent"
+      ? recentGames
+      : games || [];
 
   return (
     <div className="space-y-6">
@@ -301,42 +312,13 @@ export function GameGrid({
         loading={loading}
       />
 
-      {isAuthenticated && (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recently Played</h2>
-            {recentLoading && (
-              <span className="text-sm text-gray-500 dark:text-gray-400">Loading...</span>
-            )}
-          </div>
-
-          {recentGames.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {recentGames.map((game) => (
-                <GameCard
-                  key={game.id}
-                  game={game}
-                  onPlay={handlePlay}
-                  onFavoriteToggle={handleFavoriteToggle}
-                  isFavorited={favoriteIds.has(game.id)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-600 dark:border-slate-800 dark:bg-slate-950 dark:text-gray-300">
-              No recently played games yet.
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Toggle: All Games / My Favorites */}
+      {/* Toggle: All Games / My Favorites / Recently Played */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setShowFavorites(false)}
+            onClick={() => setActiveView("all")}
             className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
-              !showFavorites
+              activeView === "all"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
@@ -344,18 +326,38 @@ export function GameGrid({
             All Games
           </button>
           <button
-            onClick={() => setShowFavorites(true)}
+            onClick={() => setActiveView("favorites")}
             className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
-              showFavorites
+              activeView === "favorites"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             My Favorites ({favoriteGames.length})
           </button>
+          {isAuthenticated && recentGames.length > 0 && (
+            <button
+              onClick={() => setActiveView("recent")}
+              className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
+                activeView === "recent"
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Recently Played ({recentGames.length})
+            </button>
+          )}
         </div>
 
-        <div className="text-sm text-gray-600 dark:text-gray-400">{showFavorites ? `${favoriteGames.length} favorite(s)` : `${pagination.total} total`}</div>
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          {activeView === "favorites"
+            ? `${favoriteGames.length} favorite(s)`
+            : activeView === "recent"
+            ? recentLoading
+              ? "Loading..."
+              : `${recentGames.length} recent`
+            : `${pagination.total} total`}
+        </div>
       </div>
 
       {/* Error State */}
@@ -403,7 +405,7 @@ export function GameGrid({
           </div>
 
           {/* Pagination (only for All Games list) */}
-          {!showFavorites && (
+          {activeView === "all" && (
             <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Page {pagination.page} of {pagination.totalPages} (
@@ -435,7 +437,11 @@ export function GameGrid({
         <div className="flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-12 dark:border-slate-800 dark:bg-slate-950">
           <div className="text-center">
             <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">No games found</p>
-            <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {activeView === "recent"
+                ? "Play a game to see it here"
+                : "Try adjusting your filters"}
+            </p>
           </div>
         </div>
       )}
