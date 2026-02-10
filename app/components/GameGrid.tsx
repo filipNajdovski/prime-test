@@ -74,8 +74,11 @@ export function GameGrid({
     if (provider) params.append("provider", provider);
 
     const queryString = params.toString();
-    router.push(queryString ? `?${queryString}` : "");
-  }, [page, sort, category, search, provider, router, defaultSort]);
+    const currentQuery = searchParams.toString();
+    if (queryString !== currentQuery) {
+      router.replace(queryString ? `?${queryString}` : "");
+    }
+  }, [page, sort, category, search, provider, router, defaultSort, searchParams]);
 
   const handlePrevPage = () => {
     if (page > 1) setPage(page - 1);
