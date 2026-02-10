@@ -60,7 +60,8 @@ Open http://localhost:3000
 
 See `.env.example` for the full list.
 
-- `DATABASE_URL` - Postgres connection string
+- `DATABASE_URL` - Pooled Postgres connection string (runtime)
+- `DIRECT_URL` - Direct Postgres connection string (migrations)
 - `JWT_SECRET` - Secret used to sign JWTs
 - `NEXT_PUBLIC_API_URL` - Base URL for API calls (local dev: http://localhost:3000)
 
@@ -129,9 +130,18 @@ The seed script inserts:
 
 1. Push the repo to GitHub
 2. Create a new Vercel project
-3. Set env vars in Vercel dashboard
-4. Use a managed Postgres (Neon, Vercel Postgres, Supabase)
-5. Deploy
+3. Add a Postgres database (Vercel Postgres / Neon)
+4. Set env vars in Vercel dashboard
+	- `DATABASE_URL` = pooled connection string
+	- `DIRECT_URL` = direct connection string
+	- `JWT_SECRET` = strong random string
+5. Run migrations locally against the direct URL
+	```bash
+	$env:DATABASE_URL=$env:DIRECT_URL
+	npx prisma migrate deploy
+	npm run seed
+	```
+6. Deploy
 
 ## Design Decisions
 

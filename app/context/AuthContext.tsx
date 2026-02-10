@@ -26,6 +26,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const parseJsonSafely = async <T,>(response: Response): Promise<T | null> => {
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      const text = await response.text();
+      return text ? (JSON.parse(text) as T) : null;
+    }
+    const text = await response.text();
+    return text ? (JSON.parse(text) as T) : null;
+  };
+
   // Load from localStorage on mount
   useEffect(() => {
     const storedToken = localStorage.getItem("auth_token");
@@ -41,8 +51,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        `${baseUrl}/api/auth/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -51,11 +62,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       );
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Login failed");
+        const error = await parseJsonSafely<{ message?: string }>(response);
+        throw new Error(error?.message || "Login failed");
       }
 
-      const data = await response.json();
+      const data = await parseJsonSafely<{ token: string; user: User }>(response);
+      if (!data) {
+        throw new Error("Login failed: empty response");
+      }
       setToken(data.token);
       setUser(data.user);
       localStorage.setItem("auth_token", data.token);
@@ -70,8 +84,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (email: string, username: string, password: string, name?: string) => {
     setLoading(true);
     try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        `${baseUrl}/api/auth/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -80,11 +95,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       );
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Registration failed");
+        const error = await parseJsonSafely<{ message?: string }>(response);
+        throw new Error(error?.message || "Registration failed");
       }
 
-      const data = await response.json();
+      const data = await parseJsonSafely<{ token: string; user: User }>(response);
+      if (!data) {
+        throw new Error("Registration failed: empty response");
+      }
       setToken(data.token);
       setUser(data.user);
       localStorage.setItem("auth_token", data.token);
