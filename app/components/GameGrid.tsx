@@ -56,6 +56,8 @@ export function GameGrid({
 
   const allGames = useMemo(() => allGamesList, [allGamesList]);
   const { isAuthenticated } = useAuth();
+  const [recentGames, setRecentGames] = useState<Game[]>([]);
+  const [recentLoading, setRecentLoading] = useState(false);
 
   // Favorites state
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
@@ -97,6 +99,7 @@ export function GameGrid({
       if (!isAuthenticated) {
         setFavoriteIds(new Set());
         setFavoriteGames([]);
+        setRecentGames([]);
         return;
       }
 
@@ -117,6 +120,28 @@ export function GameGrid({
     };
 
     loadFavorites();
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    const loadRecent = async () => {
+      if (!isAuthenticated) return;
+      setRecentLoading(true);
+      try {
+        const token = localStorage.getItem("auth_token");
+        const res = await fetch(`/api/games/recent?limit=8`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const json = (await res.json()) as { data: Game[] };
+        setRecentGames(json.data || []);
+      } catch (err) {
+        console.error("Load recent games error", err);
+      } finally {
+        setRecentLoading(false);
+      }
+    };
+
+    loadRecent();
   }, [isAuthenticated]);
 
   const handlePlay = async (gameId: string) => {
@@ -260,6 +285,35 @@ export function GameGrid({
 
   return (
     <div className="space-y-6">
+      {isAuthenticated && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recently Played</h2>
+            {recentLoading && (
+              <span className="text-sm text-gray-500 dark:text-gray-400">Loading...</span>
+            )}
+          </div>
+
+          {recentGames.length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {recentGames.map((game) => (
+                <GameCard
+                  key={game.id}
+                  game={game}
+                  onPlay={handlePlay}
+                  onFavoriteToggle={handleFavoriteToggle}
+                  isFavorited={favoriteIds.has(game.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-600 dark:border-slate-800 dark:bg-slate-950 dark:text-gray-300">
+              No recently played games yet.
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Search & Filters */}
       <SearchBar
         onSearchChange={handleSearchChange}
@@ -300,15 +354,15 @@ export function GameGrid({
           </button>
         </div>
 
-        <div className="text-sm text-gray-600">{showFavorites ? `${favoriteGames.length} favorite(s)` : `${pagination.total} total`}</div>
+        <div className="text-sm text-gray-600 dark:text-gray-400">{showFavorites ? `${favoriteGames.length} favorite(s)` : `${pagination.total} total`}</div>
       </div>
 
       {/* Error State */}
       {error && (
-        <div className="flex items-center justify-center rounded-lg border border-red-200 bg-red-50 p-8">
+        <div className="flex items-center justify-center rounded-lg border border-red-200 bg-red-50 p-8 dark:border-red-900/40 dark:bg-red-950/40">
           <div className="text-center">
-            <p className="text-lg font-semibold text-red-800">Error</p>
-            <p className="text-red-600">{error}</p>
+            <p className="text-lg font-semibold text-red-800 dark:text-red-200">Error</p>
+            <p className="text-red-600 dark:text-red-200">{error}</p>
           </div>
         </div>
       )}
@@ -319,13 +373,13 @@ export function GameGrid({
           {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
-              className="overflow-hidden rounded-lg border border-gray-200 bg-white"
+              className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-950"
             >
-              <div className="h-40 w-full animate-pulse bg-gray-200" />
+              <div className="h-40 w-full animate-pulse bg-gray-200 dark:bg-slate-800" />
               <div className="space-y-3 p-4">
-                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
-                <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200" />
-                <div className="h-8 w-full animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-slate-800" />
+                <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-slate-800" />
+                <div className="h-8 w-full animate-pulse rounded bg-gray-200 dark:bg-slate-800" />
               </div>
             </div>
           ))}
@@ -349,8 +403,8 @@ export function GameGrid({
 
           {/* Pagination (only for All Games list) */}
           {!showFavorites && (
-            <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4">
-              <div className="text-sm text-gray-600">
+            <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Page {pagination.page} of {pagination.totalPages} (
                 {pagination.total} total games)
               </div>
@@ -358,14 +412,14 @@ export function GameGrid({
                 <button
                   onClick={handlePrevPage}
                   disabled={page === 1}
-                  className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50"
+                  className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-900"
                 >
                   Previous
                 </button>
                 <button
                   onClick={handleNextPage}
                   disabled={page >= pagination.totalPages}
-                  className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50"
+                  className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50 hover:bg-gray-50 dark:border-slate-700 dark:text-gray-100 dark:hover:bg-slate-900"
                 >
                   Next
                 </button>
@@ -377,10 +431,10 @@ export function GameGrid({
 
       {/* Empty State */}
       {!loading && displayedGames.length === 0 && (
-        <div className="flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-12">
+        <div className="flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-12 dark:border-slate-800 dark:bg-slate-950">
           <div className="text-center">
-            <p className="text-lg font-semibold text-gray-900">No games found</p>
-            <p className="text-gray-600">Try adjusting your filters</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">No games found</p>
+            <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters</p>
           </div>
         </div>
       )}
