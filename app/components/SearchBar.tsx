@@ -35,14 +35,14 @@ const SearchBarComponent = ({
   const debouncedSearch = useDebounce(localSearch, 400);
 
   useEffect(() => {
-    setLocalSearch(currentSearch);
-  }, [currentSearch]);
+    if (currentSearch !== debouncedSearch) {
+      setLocalSearch(currentSearch);
+    }
+  }, [currentSearch, debouncedSearch]);
 
   useEffect(() => {
-    if (debouncedSearch !== currentSearch) {
-      onSearchChange(debouncedSearch);
-    }
-  }, [debouncedSearch, currentSearch, onSearchChange]);
+    onSearchChange(debouncedSearch);
+  }, [debouncedSearch, onSearchChange]);
 
   // Handle search button click or Enter key
   const handleSearch = () => {
@@ -89,7 +89,10 @@ const SearchBarComponent = ({
             {localSearch && (
               <button
                 type="button"
-                onClick={() => onSearchChange("")}
+                onClick={() => {
+                  setLocalSearch("");
+                  onSearchChange("");
+                }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 aria-label="Clear search"
               >
